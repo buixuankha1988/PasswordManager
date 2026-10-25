@@ -1,0 +1,16 @@
+# Dependencies & build
+extension/node_modules/
+PasswordManager-extension-v0.1.0/
+
+# Secrets & local imports (Kaspersky export, vault backups)
+.env
+.env.*
+*.edb
+**/pending-kpm-import.txt
+kpm*/
+*.txt
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

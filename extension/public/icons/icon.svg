@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Password Manager">
+  <defs>
+    <linearGradient id="bg" x1="16" y1="8" x2="112" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <path
+    d="M64 34a18 18 0 0 1 18 18v8.5H46V52a18 18 0 0 1 18-18Z"
+    fill="none"
+    stroke="#fff"
+    stroke-width="7"
+    stroke-linecap="round"
+  />
+  <rect x="40" y="60" width="48" height="40" rx="10" fill="#fff"/>
+  <circle cx="64" cy="74" r="5.5" fill="#0f766e"/>
+  <path
+    d="M64 79.5v12"
+    stroke="#0f766e"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+</svg>

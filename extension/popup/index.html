@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Password Manager</title>
+  </head>
+  <body>
+    <main class="card">
+      <div class="title-row">
+        <h1>Password Manager</h1>
+        <span id="app-version" class="version-badge"></span>
+      </div>
+      <p id="subtitle" class="subtitle"></p>
+
+      <div id="form-view">
+        <label class="field">
+          <span id="password-label">Master password</span>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Nhập master password"
+          />
+        </label>
+        <label id="confirm-wrap" class="field hidden">
+          <span>Nhập lại master password</span>
+          <input
+            id="confirm"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Nhập lại"
+          />
+        </label>
+        <p id="error" class="error hidden" role="alert"></p>
+        <button id="primary" type="button" class="btn primary">Tiếp tục</button>
+      </div>
+
+      <div id="unlocked-view" class="hidden">
+        <p class="status ok">Vault đang mở khóa.</p>
+        <p id="vault-meta" class="meta"></p>
+        <p class="section-title popup-section">Tài khoản đã lưu</p>
+        <label class="field popup-search">
+          <span class="sr-only">Tìm kiếm</span>
+          <input
+            id="account-search"
+            type="search"
+            placeholder="Tìm kiếm (Ctrl+F)"
+            autocomplete="off"
+          />
+        </label>
+        <div id="account-tree" class="popup-account-tree"></div>
+        <button id="open-options" type="button" class="btn secondary btn-linkish">
+          Quản lý / thêm tài khoản…
+        </button>
+        <button id="lock" type="button" class="btn secondary">Khóa vault</button>
+      </div>
+    </main>
+    <script type="module" src="../src/popup/main.ts"></script>
+  </body>
+</html>

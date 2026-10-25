@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Password Manager — Quản lý</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <img src="../icons/icon-48.png" alt="" width="36" height="36" />
+          </div>
+          <div>
+            <div class="brand-text">Password Manager</div>
+            <div class="brand-sub">Local vault</div>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Menu">
+          <button type="button" class="nav-item active" data-view="home">
+            <span class="nav-icon">⌂</span>
+            Chính
+          </button>
+          <button type="button" class="nav-item" data-view="accounts">
+            <span class="nav-icon">👤</span>
+            Tài khoản
+            <span class="nav-badge" id="nav-count">0</span>
+          </button>
+          <button type="button" class="nav-item" data-view="add">
+            <span class="nav-icon">＋</span>
+            Thêm tài khoản
+          </button>
+          <button type="button" class="nav-item" data-view="import">
+            <span class="nav-icon">↓</span>
+            Nhập dữ liệu
+          </button>
+          <button type="button" class="nav-item" data-view="settings">
+            <span class="nav-icon">⚙</span>
+            Cài đặt vault
+          </button>
+        </nav>
+        <div class="sidebar-foot">
+          <div id="vault-pill" class="vault-pill locked">Vault khóa</div>
+          <div id="sidebar-status">Mở khóa trong popup extension hoặc bên dưới.</div>
+          <div id="app-version" class="version-tag"></div>
+        </div>
+      </aside>
+
+      <div class="main-wrap">
+        <header class="topbar">
+          <h1 class="topbar-title" id="page-title">Chính</h1>
+          <div class="topbar-spacer"></div>
+          <div class="search-wrap" id="search-wrap">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input
+              id="global-search"
+              type="search"
+              placeholder="Tìm tài khoản, site…"
+              autocomplete="off"
+            />
+            <span class="search-hint">Ctrl+F</span>
+          </div>
+          <button type="button" class="btn btn-primary" id="top-add">+ Thêm</button>
+        </header>
+
+        <div id="view-home" class="content">
+          <div id="lock-banner" class="banner warn hidden">
+            <span class="banner-icon" aria-hidden="true">🔒</span>
+            <div class="banner-body">
+              <h2>Vault đang khóa</h2>
+              <p>Mở khóa để xem, thêm hoặc sửa tài khoản. Dữ liệu vẫn an toàn trên máy bạn (mã hóa).</p>
+              <div class="unlock-inline">
+                <label class="field">
+                  <span>Master password</span>
+                  <input id="unlock-pw" type="password" autocomplete="current-password" />
+                </label>
+                <button type="button" class="btn btn-primary" id="unlock-btn">Mở khóa</button>
+              </div>
+              <p id="unlock-err" class="form-msg err hidden"></p>
+            </div>
+          </div>
+
+          <div id="setup-banner" class="banner hidden">
+            <span class="banner-icon" aria-hidden="true">✨</span>
+            <div class="banner-body">
+              <h2>Chưa thiết lập vault</h2>
+              <p>Bấm icon extension trên thanh trình duyệt để tạo master password lần đầu.</p>
+            </div>
+          </div>
+
+          <div class="stats-row" id="stats-row">
+            <div class="stat-card">
+              <div class="stat-label">Tài khoản đã lưu</div>
+              <div class="stat-value accent" id="stat-accounts">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Website</div>
+              <div class="stat-value" id="stat-sites">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Lưu trữ</div>
+              <div class="stat-value" style="font-size: 1rem">Trên máy (local)</div>
+            </div>
+          </div>
+
+          <div class="section-head">
+            <h2>Tài khoản</h2>
+          </div>
+          <p class="section-sub">Lưới nhanh — bấm để sửa hoặc xóa.</p>
+          <div id="home-grid" class="card-grid"></div>
+
+          <div class="info-panel">
+            <h3>Bảo mật local</h3>
+            <p>
+              Vault mã hóa bằng master password. Trang này chỉ chạy trong extension —
+              website bên ngoài không truy cập được. Khóa vault khi rời máy.
+            </p>
+          </div>
+        </div>
+
+        <div id="view-accounts" class="content hidden">
+          <p class="section-sub">Danh sách đầy đủ theo site. <strong>Double-click</strong> một dòng để xem và copy user/pass.</p>
+          <div id="accounts-table-wrap" class="table-wrap"></div>
+        </div>
+
+        <div id="view-add" class="content hidden">
+          <h2 class="section-head" style="margin-bottom: 16px" id="form-heading">Thêm tài khoản</h2>
+          <form id="login-form" class="form-card">
+            <input type="hidden" id="login-id" />
+            <label class="field">
+              <span>Tên hiển thị</span>
+              <input id="login-title" type="text" placeholder="VD: Đăng nhập CRM" required />
+            </label>
+            <label class="field">
+              <span>Website (host)</span>
+              <input id="login-url" type="text" placeholder="anhungland.com" required />
+            </label>
+            <label class="field">
+              <span>Tên đăng nhập</span>
+              <input id="login-username" type="text" required />
+            </label>
+            <label class="field field-pass">
+              <span>Mật khẩu</span>
+              <div class="login-pass-wrap">
+                <input id="login-password" type="password" autocomplete="new-password" />
+                <button
+                  type="button"
+                  class="login-pass-icon"
+                  id="login-pass-generate"
+                  title="Tạo mật khẩu mạnh"
+                  aria-label="Tạo mật khẩu mạnh"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="23 4 23 10 17 10" />
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="login-pass-icon login-pass-eye"
+                  id="login-pass-toggle"
+                  title="Hiện / ẩn mật khẩu"
+                  aria-label="Hiện hoặc ẩn mật khẩu"
+                >
+                  <span class="login-eye-closed">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                      <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                  </span>
+                  <span class="login-eye-open">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </span>
+                </button>
+              </div>
+              <div class="login-pass-suggest hidden" id="login-pass-suggest">
+                <span class="login-pass-suggest-label">Gợi ý</span>
+                <code class="login-pass-suggest-value" id="login-pass-suggest-value"></code>
+                <button type="button" class="btn btn-ghost btn-sm" id="login-pass-suggest-use">Dùng</button>
+                <button type="button" class="btn-link-sm" id="login-pass-suggest-again">Tạo lại</button>
+              </div>
+              <p class="login-pass-strength hidden" id="login-pass-strength"></p>
+              <details class="login-pass-opt">
+                <summary>Tùy chỉnh tạo mật khẩu</summary>
+                <div class="login-pass-opt-grid">
+                  <label class="login-pass-opt-len">
+                    <span>Độ dài</span>
+                    <input id="login-pass-len" type="number" min="8" max="64" value="16" />
+                  </label>
+                  <label><input id="login-pass-upper" type="checkbox" checked /> A–Z</label>
+                  <label><input id="login-pass-lower" type="checkbox" checked /> a–z</label>
+                  <label><input id="login-pass-digits" type="checkbox" checked /> 0–9</label>
+                  <label><input id="login-pass-symbols" type="checkbox" checked /> Ký tự đặc biệt</label>
+                </div>
+              </details>
+              <details class="login-pass-history" id="login-pass-history-panel">
+                <summary>
+                  Lịch sử mật khẩu
+                  <span class="login-pass-history-badge" id="login-pass-history-count"></span>
+                </summary>
+                <p class="login-pass-history-empty hidden" id="login-pass-history-empty">Chưa có mật khẩu nào được tạo.</p>
+                <ul class="login-pass-history-list" id="login-pass-history-list"></ul>
+                <button type="button" class="btn-link-sm login-pass-history-clear hidden" id="login-pass-history-clear">
+                  Xóa toàn bộ lịch sử
+                </button>
+              </details>
+              <span class="field-hint" id="pw-hint">Bắt buộc khi thêm mới. Để trống khi sửa = giữ mật khẩu cũ.</span>
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Lưu tài khoản</button>
+              <button type="button" class="btn btn-ghost" id="form-cancel">Huỷ</button>
+            </div>
+            <p id="login-msg" class="form-msg"></p>
+          </form>
+        </div>
+
+        <div id="view-import" class="content hidden">
+          <h2 style="margin: 0 0 8px">Nhập từ Kaspersky / CSV</h2>
+          <p class="section-sub">
+            Hỗ trợ file <strong>TXT</strong> (Kaspersky → Xuất ra file text), <strong>CSV</strong> hoặc <strong>JSON</strong>.
+            File backup <code>kpm_vault.edb</code> vẫn mã hóa — không import trực tiếp.
+          </p>
+
+          <div class="info-panel import-steps">
+            <h3>Xuất TXT từ Kaspersky (đúng file bạn vừa tạo)</h3>
+            <ol>
+              <li><strong>Kaspersky Password Manager</strong> → <strong>Cài đặt</strong> → <strong>Nhập / Xuất</strong>.</li>
+              <li><strong>Xuất ra file text</strong> — định dạng <code>Website name / URL / Login / Password</code>, khối cách nhau bởi <code>---</code>.</li>
+              <li>File TXT <strong>không mã hóa</strong> — giữ kín, xóa sau khi nhập xong nếu cần.</li>
+            </ol>
+          </div>
+
+          <div class="form-card import-drop">
+            <label class="field">
+              <span>Chọn file (.csv hoặc .json)</span>
+              <input type="file" id="import-file" accept=".txt,.csv,.json,text/plain,text/csv,application/json" />
+            </label>
+            <p class="field-hint" style="margin: 0 0 12px">
+              Cùng website + tên đăng nhập sẽ được cập nhật, không nhân đôi.
+            </p>
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" id="import-run" disabled>Nhập vào vault</button>
+            </div>
+            <p id="import-preview" class="form-msg"></p>
+            <p id="import-result" class="form-msg"></p>
+          </div>
+        </div>
+
+        <div id="view-settings" class="content hidden">
+          <h2 style="margin: 0 0 8px">Cài đặt vault</h2>
+          <p class="section-sub">Quản lý dữ liệu trên trình duyệt này.</p>
+          <div class="info-panel">
+            <h3>Trạng thái</h3>
+            <p id="settings-status">—</p>
+          </div>
+          <div class="danger-zone">
+            <h3>Vùng nguy hiểm</h3>
+            <p>Xóa toàn bộ vault (master password và mật khẩu đã lưu) trên trình duyệt này. Không hoàn tác.</p>
+            <button type="button" class="btn btn-danger btn-sm" id="reset">Reset vault local</button>
+            <p id="msg" class="form-msg"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="detail-modal" class="detail-overlay hidden" aria-hidden="true">
+      <div class="detail-card" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+        <div class="detail-header">
+          <h2 id="detail-title">Chi tiết tài khoản</h2>
+          <button type="button" class="detail-close" id="detail-close" aria-label="Đóng">×</button>
+        </div>
+        <p class="detail-site" id="detail-site"></p>
+        <div class="detail-fields">
+          <div class="detail-field">
+            <label for="detail-username">Tên đăng nhập</label>
+            <div class="detail-copy-row">
+              <input id="detail-username" type="text" readonly spellcheck="false" />
+              <button type="button" class="btn btn-copy" id="detail-copy-user">Copy</button>
+            </div>
+          </div>
+          <div class="detail-field">
+            <label for="detail-password-mask">Mật khẩu</label>
+            <div class="detail-copy-row">
+              <div class="detail-pass-box detail-pass-field">
+                <div id="detail-password-mask" class="detail-pass-mask" aria-live="polite">••••••••</div>
+                <input
+                  id="detail-password"
+                  type="text"
+                  class="detail-pass-reveal hidden"
+                  readonly
+                  autocomplete="off"
+                  spellcheck="false"
+                  tabindex="-1"
+                />
+                <button
+                  type="button"
+                  class="detail-pass-eye"
+                  id="detail-toggle-pass"
+                  aria-label="Giữ để xem mật khẩu"
+                  title="Giữ chuột để xem mật khẩu"
+                >
+                  <span class="detail-eye-icon detail-eye-closed" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                      <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                  </span>
+                  <span class="detail-eye-icon detail-eye-open" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </span>
+                </button>
+              </div>
+              <button type="button" class="btn btn-copy btn-copy-accent" id="detail-copy-pass">Copy</button>
+            </div>
+          </div>
+        </div>
+        <p id="detail-copy-msg" class="form-msg"></p>
+        <div class="detail-footer">
+          <button type="button" class="btn btn-primary" id="detail-open-web">Check tại web</button>
+          <button type="button" class="btn btn-ghost" id="detail-edit">Sửa</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../src/options/main.ts"></script>
+  </body>
+</html>

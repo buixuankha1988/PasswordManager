@@ -1,0 +1,306 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, Segoe UI, Roboto, sans-serif;
+  --bg: #f4f6f8;
+  --card: #fff;
+  --text: #1a1a1a;
+  --muted: #5c6670;
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --danger: #b91c1c;
+  --border: #d0d7de;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1419;
+    --card: #1a2332;
+    --text: #e7ecf1;
+    --muted: #9aa7b5;
+    --border: #2d3a4d;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 340px;
+  max-height: 560px;
+  overflow: auto;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.card {
+  padding: 16px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.version-badge {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 6px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.subtitle {
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+}
+
+input {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: var(--card);
+  color: var(--text);
+}
+
+.btn {
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.error {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+.status.ok {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+
+.meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.section-title {
+  margin: 16px 0 6px;
+  font-size: 0.95rem;
+}
+
+.login-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.login-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.login-form {
+  margin-top: 8px;
+}
+
+.btn.small {
+  width: auto;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.divider {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.popup-section {
+  margin: 4px 0 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.popup-search {
+  margin-bottom: 8px;
+}
+
+.popup-search input {
+  width: 100%;
+}
+
+.popup-account-tree {
+  margin: 0 0 10px;
+  max-height: 260px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+
+.tree-group {
+  border-bottom: 1px solid var(--border);
+}
+
+.tree-group:last-child {
+  border-bottom: none;
+}
+
+.tree-group-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: none;
+  background: var(--bg);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+}
+
+.tree-group-head:hover {
+  background: #e8f0ef;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tree-group-head:hover {
+    background: #24303d;
+  }
+}
+
+.tree-chevron {
+  width: 12px;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.tree-host {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-count {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+.tree-children {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 4px 0;
+}
+
+.tree-leaf {
+  padding: 6px 10px 6px 28px;
+  border-top: 1px solid var(--border);
+}
+
+.tree-leaf-title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-leaf-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.popup-account-empty {
+  padding: 10px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.btn-linkish {
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+}
+
+#lock {
+  margin-top: 0;
+}
